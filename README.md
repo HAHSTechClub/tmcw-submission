@@ -5,8 +5,10 @@
 ![image](https://github.com/HAHSTechClub/tmcw-submission/assets/99528866/eedafa96-1efc-4ca6-8335-12a37730346e)
 
 Webapp built with: React.js, Material UI, Node.js, Express.js & Google APIs
+
 Front-end hosted on firebase @ [https://tmcw-submission.web.app/](url).
-API hosted with OnRender (https://tmcw-api.onrender.com/get-submitted-code-information)
+
+Backend API hosted with OnRender (https://tmcw-api.onrender.com/get-submitted-code-information)
 
 ## Features:
 - Uses a Google Sheets page as a user-friendly database:
