@@ -139,7 +139,7 @@ function SubmissionForm() {
             </form>
             <Backdrop open={backdropOpen} sx={{ zIndex: "1" }}>
                 {data ? (
-                    <Paper sx={{ width: "350px" }}>
+                    <Paper sx={{ width: "300px" }}>
                         <List>
                             <ListItem>
                                 <Typography variant="h6">
