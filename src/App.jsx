@@ -53,7 +53,7 @@ function App() {
                             </List>
                         </Paper>
                     </ListItem>
-                    <ListItem sx={{ justifyContent: "center" }}></ListItem>
+                    <Divider></Divider>
                     <ListItem sx={{ justifyContent: "center" }}>
                         <SubmissionForm />
                     </ListItem>
@@ -82,9 +82,8 @@ function App() {
                             </ListItem>
                         </Paper>
                     </ListItem>
-                    <ListItem
-                        sx={{ justifyContent: "center", marginTop: "2rem" }}
-                    >
+                    <Divider></Divider>
+                    <ListItem sx={{ justifyContent: "center" }}>
                         <List>
                             <ListItem>
                                 <Chip
