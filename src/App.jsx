@@ -52,7 +52,7 @@ function App() {
                     </ListItem>
 
                     <ListItem>
-                        <Paper elevation={3}>
+                        <Paper elevation={3} sx={{ width: "100%" }}>
                             <ListItem
                                 sx={{
                                     justifyContent: "center",
