@@ -39,7 +39,14 @@ function App() {
                                     />
                                 </ListItem>
                                 <ListItem sx={{ justifyContent: "center" }}>
-                                    <Typography variant="h5">
+                                    <Typography
+                                        variant="h1"
+                                        sx={{
+                                            fontSize: "2rem",
+                                            fontFamily:
+                                                "Kaushan Script, cursive",
+                                        }}
+                                    >
                                         TMCW Submission Page
                                     </Typography>
                                 </ListItem>
