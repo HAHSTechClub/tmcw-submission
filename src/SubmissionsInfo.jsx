@@ -5,6 +5,8 @@ import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 
+import Box from "@mui/material/Box";
+
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 
@@ -33,7 +35,7 @@ function SubmissionsInfo() {
     }, []);
 
     return (
-        <Paper elevation={4}>
+        <Box>
             {data ? (
                 data.map((row, index) => {
                     return (
@@ -83,7 +85,7 @@ function SubmissionsInfo() {
             ) : (
                 <CircularProgress />
             )}
-        </Paper>
+        </Box>
     );
 }
 
