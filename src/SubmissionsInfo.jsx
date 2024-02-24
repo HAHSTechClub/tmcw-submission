@@ -15,13 +15,13 @@ import Divider from "@mui/material/Divider";
 
 import CircularProgress from "@mui/material/CircularProgress";
 
-function SubmissionsInfo() {
+function SubmissionsInfo({ api_url, submissionsCount }) {
     const [data, setData] = useState(null);
 
     useEffect(() => {
         async function fetchData() {
             const response = await fetch(
-                "https://tmcw-api.onrender.com/get-submitted-code-information"
+                api_url + "/get-submitted-code-information"
             );
 
             const json = await response.json();
@@ -30,7 +30,7 @@ function SubmissionsInfo() {
         }
 
         fetchData();
-    }, []);
+    }, [submissionsCount]);
 
     return (
         <Paper elevation={4}>
@@ -45,7 +45,7 @@ function SubmissionsInfo() {
                                         width: "66.66%",
                                     }}
                                 >
-                                    {row.code}
+                                    {row.challengeName}
                                 </Typography>
                                 <Typography
                                     variant="body1"

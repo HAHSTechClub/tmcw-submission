@@ -13,7 +13,14 @@ import SubmissionsInfo from "./SubmissionsInfo";
 
 import Divider from "@mui/material/Divider";
 
+const dev_mode = false;
+const api_url = dev_mode
+    ? "http://localhost:3000"
+    : "https://tmcw-api.onrender.com";
+
 function App() {
+    const [submissionsCount, setSubmissionCount] = useState(0);
+
     return (
         <Box sx={{ display: "flex", justifyContent: "center" }}>
             <Box sx={{ maxWidth: "400px", flexGrow: "1" }}>
@@ -31,7 +38,11 @@ function App() {
                         </Typography>
                     </ListItem>
                     <ListItem sx={{ justifyContent: "center" }}>
-                        <SubmissionForm />
+                        <SubmissionForm
+                            api_url={api_url}
+                            submissionsCount={submissionsCount}
+                            setSubmissionCount={setSubmissionCount}
+                        />
                     </ListItem>
 
                     <ListItem
@@ -46,7 +57,11 @@ function App() {
                         </Typography>
                     </ListItem>
                     <ListItem sx={{ justifyContent: "center" }}>
-                        <SubmissionsInfo />
+                        <SubmissionsInfo
+                            api_url={api_url}
+                            submissionsCount={submissionsCount}
+                            setSubmissionCount={setSubmissionCount}
+                        />
                     </ListItem>
                     <ListItem
                         sx={{ justifyContent: "center", marginTop: "2rem" }}

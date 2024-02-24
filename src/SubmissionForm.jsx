@@ -12,7 +12,7 @@ import Divider from "@mui/material/Divider";
 import Alert from "@mui/material/Alert";
 import { useState } from "react";
 
-function SubmissionForm() {
+function SubmissionForm({ api_url, submissionsCount, setSubmissionCount }) {
     const [backdropOpen, setBackdropOpen] = useState(false);
 
     const [data, setData] = useState(null);
@@ -57,13 +57,16 @@ function SubmissionForm() {
         setBackdropOpen(true);
 
         setShowingMessage(true);
-        const api_endpoint = `https://tmcw-api.onrender.com/submit/?name=${formValues.name.value}&code=${formValues.code.value}&rollClass=${formValues.rollClass.value}`;
+        const api_endpoint =
+            api_url +
+            `/submit/?name=${formValues.name.value}&code=${formValues.code.value}&rollClass=${formValues.rollClass.value}`;
 
         const response = await fetch(api_endpoint);
 
         const json = await response.json();
 
         setData(json);
+        setSubmissionCount(submissionsCount + 1);
     };
 
     const [formValues, setFormValues] = useState({
