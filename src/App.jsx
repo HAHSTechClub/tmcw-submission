@@ -16,12 +16,7 @@ import Divider from "@mui/material/Divider";
 
 import TilingBackground from "./assets/tiling-background.png";
 
-const dev_mode = true;
-const api_url = dev_mode
-    ? "http://localhost:3000"
-    : "https://tmcw-api.onrender.com";
-
-function App() {
+function App({ api_url }) {
     const [submissionsCount, setSubmissionCount] = useState(0);
 
     return (
