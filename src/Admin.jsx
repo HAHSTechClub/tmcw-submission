@@ -126,6 +126,7 @@ function Admin({ api_url }) {
                                                             }}
                                                         >
                                                             <img
+                                                                width="250px"
                                                                 src={item.image}
                                                             />
                                                         </ListItem>
@@ -185,7 +186,6 @@ function Admin({ api_url }) {
                                                                 const api_endpoint =
                                                                     api_url +
                                                                     `/reject-submission?adminCode=${adminCode}&id=${id}`;
-                                                                ad;
 
                                                                 await fetch(
                                                                     api_endpoint
