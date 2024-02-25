@@ -68,10 +68,7 @@ function App({ api_url }) {
                         sx={{ justifyContent: "center", marginTop: "1rem" }}
                     >
                         {" "}
-                        <Typography
-                            variant="h6"
-                            sx={{ color: "text.secondary" }}
-                        >
+                        <Typography variant="h6" sx={{ color: "#555555" }}>
                             Submitted Challenges & Winners! 🏆
                         </Typography>
                     </ListItem>
@@ -81,23 +78,44 @@ function App({ api_url }) {
                             submissionsCount={submissionsCount}
                         />
                     </ListItem>
-                    <ListItem
-                        sx={{ justifyContent: "center", marginTop: "2rem" }}
-                    >
-                        <Chip
-                            variant="outlined"
-                            label={
-                                <p>
-                                    Made with 💜 by{" "}
-                                    <a
-                                        href="https://github.com/UtsavK-0112"
-                                        style={{ color: "black" }}
-                                    >
-                                        Utsav Kashichhwa
-                                    </a>
-                                </p>
-                            }
-                        />
+                    <Divider></Divider>
+
+                    <ListItem sx={{ justifyContent: "center" }}>
+                        <List>
+                            <ListItem>
+                                <Chip
+                                    variant="outlined"
+                                    label={
+                                        <p>
+                                            Made with 💜 by{" "}
+                                            <a
+                                                href="https://github.com/UtsavK-0112"
+                                                style={{ color: "black" }}
+                                            >
+                                                Utsav Kashichhwa
+                                            </a>
+                                        </p>
+                                    }
+                                />
+                            </ListItem>
+                            <ListItem>
+                                {" "}
+                                <Chip
+                                    variant="outlined"
+                                    label={
+                                        <p>
+                                            Background image from{" "}
+                                            <a
+                                                href="https://pngtree.com/freepng/memphis-technology-gradient-line_3779028.html"
+                                                style={{ color: "black" }}
+                                            >
+                                                pngtree.com
+                                            </a>
+                                        </p>
+                                    }
+                                />
+                            </ListItem>
+                        </List>
                     </ListItem>
                 </List>
             </Box>

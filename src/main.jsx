@@ -17,7 +17,7 @@ const theme = createTheme({
     },
 });
 
-const dev_mode = true;
+const dev_mode = false;
 const api_url = dev_mode
     ? "http://localhost:3000"
     : "https://tmcw-api.onrender.com";
