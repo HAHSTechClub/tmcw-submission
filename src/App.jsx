@@ -16,7 +16,7 @@ import Divider from "@mui/material/Divider";
 
 import TilingBackground from "./assets/tiling-background.png";
 
-const dev_mode = false;
+const dev_mode = true;
 const api_url = dev_mode
     ? "http://localhost:3000"
     : "https://tmcw-api.onrender.com";
@@ -77,11 +77,14 @@ function App() {
                             variant="h6"
                             sx={{ color: "text.secondary" }}
                         >
-                            Submitted Codes & Winners! 🏆
+                            Submitted Challenges & Winners! 🏆
                         </Typography>
                     </ListItem>
                     <ListItem sx={{ justifyContent: "center" }}>
-                        <SubmissionsInfo />
+                        <SubmissionsInfo
+                            api_url={api_url}
+                            submissionsCount={submissionsCount}
+                        />
                     </ListItem>
                     <ListItem
                         sx={{ justifyContent: "center", marginTop: "2rem" }}

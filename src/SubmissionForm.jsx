@@ -8,14 +8,17 @@ import CircularProgress from "@mui/material/CircularProgress";
 
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 
 import Alert from "@mui/material/Alert";
 import { useState } from "react";
 
 function SubmissionForm({ api_url, submissionsCount, setSubmissionCount }) {
     const [backdropOpen, setBackdropOpen] = useState(false);
-
     const [data, setData] = useState(null);
+
+    const [imageSubmission, setImageSubmission] = useState(false);
+    const [imageFile, setImageFile] = useState(null);
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -49,23 +52,43 @@ function SubmissionForm({ api_url, submissionsCount, setSubmissionCount }) {
             }
         });
 
+        if (imageSubmission && imageFile == null) {
+            alert("Please upload a photo of your solution!");
+            return;
+        }
+
         if (shouldReturn) {
             return;
         }
 
         console.log("Making API Call");
         setBackdropOpen(true);
-
         setShowingMessage(true);
-        const api_endpoint =
-            api_url +
-            `/submit/?name=${formValues.name.value}&code=${formValues.code.value}&rollClass=${formValues.rollClass.value}`;
 
-        const response = await fetch(api_endpoint);
+        if (imageSubmission) {
+            const api_endpoint =
+                api_url +
+                `/submit-image/?name=${formValues.name.value}&code=${formValues.code.value}&rollClass=${formValues.rollClass.value}`;
 
-        const json = await response.json();
+            const response = await fetch(api_endpoint, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ image: imageFile }),
+            });
+            const json = await response.json();
+            setData(json);
+        } else {
+            const api_endpoint =
+                api_url +
+                `/submit/?name=${formValues.name.value}&code=${formValues.code.value}&rollClass=${formValues.rollClass.value}`;
 
-        setData(json);
+            const response = await fetch(api_endpoint);
+            const json = await response.json();
+            setData(json);
+        }
+
         setSubmissionCount(submissionsCount + 1);
     };
 
@@ -108,9 +131,74 @@ function SubmissionForm({ api_url, submissionsCount, setSubmissionCount }) {
                             name="code"
                             label="Code"
                             error={formValues.code.error}
-                            onChange={(event) => handleChange(event)}
+                            onChange={(event) => {
+                                handleChange(event);
+                                setImageSubmission(
+                                    event.target.value == "Chessboard" ||
+                                        event.target.value == "Triangle"
+                                );
+                            }}
                         />
                     </ListItem>
+                    {imageSubmission ? (
+                        <>
+                            <Divider
+                                sx={{
+                                    transition: "all 200ms ease-in",
+                                }}
+                            ></Divider>
+                            <ListItem
+                                sx={{
+                                    justifyContent: "center",
+                                    transition: "all 200ms ease-in",
+                                }}
+                            >
+                                <List>
+                                    <ListItem sx={{ justifyContent: "center" }}>
+                                        <Paper sx={{ padding: "8px" }}>
+                                            <img
+                                                src={imageFile}
+                                                width="200px"
+                                            />
+                                        </Paper>
+                                    </ListItem>
+                                    <ListItem sx={{ justifyContent: "center" }}>
+                                        <input
+                                            type="file"
+                                            name="imageUpload"
+                                            id="imageUpload"
+                                            hidden
+                                            onChange={(event) => {
+                                                const reader = new FileReader();
+
+                                                reader.readAsDataURL(
+                                                    event.target.files[0]
+                                                );
+                                                reader.onload = function (
+                                                    event
+                                                ) {
+                                                    console.log(reader.result);
+                                                    setImageFile(reader.result);
+                                                };
+                                            }}
+                                        />
+                                        <label htmlFor="imageUpload">
+                                            <Button
+                                                variant="contained"
+                                                startIcon={<CloudUploadIcon />}
+                                                component="span"
+                                            >
+                                                Upload Image
+                                            </Button>
+                                        </label>
+                                    </ListItem>
+                                </List>
+                            </ListItem>
+                            <Divider></Divider>
+                        </>
+                    ) : (
+                        <></>
+                    )}
                     <ListItem sx={{ justifyContent: "center" }}>
                         <TextField
                             autoComplete="off"
