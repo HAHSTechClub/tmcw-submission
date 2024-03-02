@@ -101,7 +101,7 @@ function Admin({ api_url }) {
                         </Paper>
                     </ListItem>
                     <ListItem>
-                        <List>
+                        <List sx={{ width: "100%" }}>
                             {data && imageChallengeNames ? (
                                 <>
                                     {imageChallengeNames.map((name) => {
@@ -111,7 +111,11 @@ function Admin({ api_url }) {
                                                     <Paper
                                                         sx={{ width: "100%" }}
                                                     >
-                                                        <List>
+                                                        <List
+                                                            sx={{
+                                                                width: "100%",
+                                                            }}
+                                                        >
                                                             <ListItem>
                                                                 <Typography
                                                                     variant="h4"
@@ -123,9 +127,7 @@ function Admin({ api_url }) {
                                                                     {name}
                                                                 </Typography>
                                                             </ListItem>
-                                                            <Divider
-                                                                textAl
-                                                            ></Divider>
+                                                            <Divider></Divider>
                                                             <ListItem>
                                                                 <EmojiEventsIcon
                                                                     sx={{
@@ -248,28 +250,26 @@ function Admin({ api_url }) {
                                                                                     submissionData
                                                                                 ) => {
                                                                                     return (
-                                                                                        <ListItem>
-                                                                                            <ImageSubmission
-                                                                                                setBackdrop={
-                                                                                                    setBackdrop
-                                                                                                }
-                                                                                                api_url={
-                                                                                                    api_url
-                                                                                                }
-                                                                                                actionsCount={
-                                                                                                    actionsCount
-                                                                                                }
-                                                                                                setActionsCount={
-                                                                                                    setActionsCount
-                                                                                                }
-                                                                                                submissionData={
-                                                                                                    submissionData
-                                                                                                }
-                                                                                                adminCode={
-                                                                                                    adminCode
-                                                                                                }
-                                                                                            />
-                                                                                        </ListItem>
+                                                                                        <ImageSubmission
+                                                                                            setBackdrop={
+                                                                                                setBackdrop
+                                                                                            }
+                                                                                            api_url={
+                                                                                                api_url
+                                                                                            }
+                                                                                            actionsCount={
+                                                                                                actionsCount
+                                                                                            }
+                                                                                            setActionsCount={
+                                                                                                setActionsCount
+                                                                                            }
+                                                                                            submissionData={
+                                                                                                submissionData
+                                                                                            }
+                                                                                            adminCode={
+                                                                                                adminCode
+                                                                                            }
+                                                                                        />
                                                                                     );
                                                                                 }
                                                                             )

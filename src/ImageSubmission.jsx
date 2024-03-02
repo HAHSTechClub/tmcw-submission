@@ -9,6 +9,9 @@ import Button from "@mui/material/Button";
 import Done from "@mui/icons-material/Done";
 import Close from "@mui/icons-material/Close";
 
+import { PhotoProvider, PhotoView } from "react-photo-view";
+import "react-photo-view/dist/react-photo-view.css";
+
 function ImageSubmission({
     setBackdrop,
     actionsCount,
@@ -21,6 +24,7 @@ function ImageSubmission({
         <ListItem
             sx={{
                 justifyContent: "center",
+                width: "100%",
             }}
             key={submissionData.id}
             id={submissionData.id}
@@ -28,6 +32,10 @@ function ImageSubmission({
             <Card
                 sx={{
                     minWidth: "300px",
+                    boxShadow:
+                        submissionData.isAccepted == "VERIFIED"
+                            ? "0px 2px 1px -1px gold, 0px 1px 1px 0px gold, 0px 1px 3px 0px gold"
+                            : "0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)",
                 }}
             >
                 <Box
@@ -66,7 +74,11 @@ function ImageSubmission({
                             justifyContent: "center",
                         }}
                     >
-                        <img width="250px" src={submissionData.image} />
+                        <PhotoProvider>
+                            <PhotoView src={submissionData.image}>
+                                <img width="250px" src={submissionData.image} />
+                            </PhotoView>
+                        </PhotoProvider>
                     </ListItem>
                 </List>
 
@@ -93,8 +105,13 @@ function ImageSubmission({
                                 setBackdrop(true);
 
                                 await fetch(api_endpoint);
-                                setActionsCount(actionsCount + 1);
-                                setTimeout(() => setBackdrop(false), 2000);
+                                setTimeout(() => {
+                                    setActionsCount(actionsCount + 1);
+                                    setBackdrop(false);
+                                }, 1000);
+                                setTimeout(() => {
+                                    setBackdrop(false);
+                                }, 3000);
                             }}
                         >
                             Reject
@@ -115,8 +132,13 @@ function ImageSubmission({
 
                                 await fetch(api_endpoint);
 
-                                setActionsCount(actionsCount + 1);
-                                setTimeout(() => setBackdrop(false), 2000);
+                                setTimeout(() => {
+                                    setActionsCount(actionsCount + 1);
+                                    setBackdrop(false);
+                                }, 1000);
+                                setTimeout(() => {
+                                    setBackdrop(false);
+                                }, 3000);
                             }}
                         >
                             Verify
