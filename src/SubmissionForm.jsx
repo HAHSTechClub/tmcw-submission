@@ -11,7 +11,7 @@ import Divider from "@mui/material/Divider";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 
 import Alert from "@mui/material/Alert";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function SubmissionForm({ api_url, submissionsCount, setSubmissionCount }) {
     const [backdropOpen, setBackdropOpen] = useState(false);
@@ -19,6 +19,21 @@ function SubmissionForm({ api_url, submissionsCount, setSubmissionCount }) {
 
     const [imageSubmission, setImageSubmission] = useState(false);
     const [imageFile, setImageFile] = useState(null);
+
+    const [imageChallengeNames, setImageChallengeNames] = useState(null);
+
+    useEffect(() => {
+        async function fetchImageSubmissionNames() {
+            const response = await fetch(
+                api_url + "/get-image-submissions-names"
+            );
+
+            const json = await response.json();
+            setImageChallengeNames(json);
+        }
+
+        fetchImageSubmissionNames();
+    }, []);
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -63,12 +78,11 @@ function SubmissionForm({ api_url, submissionsCount, setSubmissionCount }) {
 
         console.log("Making API Call");
         setBackdropOpen(true);
-        setShowingMessage(true);
 
         if (imageSubmission) {
             const api_endpoint =
                 api_url +
-                `/submit-image/?name=${formValues.name.value}&code=${formValues.code.value}&rollClass=${formValues.rollClass.value}`;
+                `/submit-image/?name=${formValues.name.value}&challengeName=${formValues.code.value}&rollClass=${formValues.rollClass.value}`;
 
             const response = await fetch(api_endpoint, {
                 method: "POST",
@@ -82,7 +96,7 @@ function SubmissionForm({ api_url, submissionsCount, setSubmissionCount }) {
         } else {
             const api_endpoint =
                 api_url +
-                `/submit/?name=${formValues.name.value}&code=${formValues.code.value}&rollClass=${formValues.rollClass.value}`;
+                `/submit-code/?name=${formValues.name.value}&code=${formValues.code.value}&rollClass=${formValues.rollClass.value}`;
 
             const response = await fetch(api_endpoint);
             const json = await response.json();
@@ -110,10 +124,11 @@ function SubmissionForm({ api_url, submissionsCount, setSubmissionCount }) {
         },
     });
 
-    const [showingMessage, setShowingMessage] = useState(false);
-
     return (
         <Paper elevation={4} sx={{ flexGrow: "1" }}>
+            <Backdrop open={!imageChallengeNames == null} sx={{ zIndex: "1" }}>
+                <CircularProgress></CircularProgress>
+            </Backdrop>
             <form>
                 <List style={{ justifyContent: "center" }}>
                     <ListItem>
@@ -134,8 +149,9 @@ function SubmissionForm({ api_url, submissionsCount, setSubmissionCount }) {
                             onChange={(event) => {
                                 handleChange(event);
                                 setImageSubmission(
-                                    event.target.value == "Chessboard" ||
-                                        event.target.value == "Triangle"
+                                    imageChallengeNames.includes(
+                                        event.target.value
+                                    )
                                 );
                             }}
                         />
@@ -177,7 +193,6 @@ function SubmissionForm({ api_url, submissionsCount, setSubmissionCount }) {
                                                 reader.onload = function (
                                                     event
                                                 ) {
-                                                    console.log(reader.result);
                                                     setImageFile(reader.result);
                                                 };
                                             }}

@@ -11,9 +11,16 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
+import Backdrop from "@mui/material/Backdrop";
 
 import Done from "@mui/icons-material/Done";
 import Close from "@mui/icons-material/Close";
+
+import ImageSubmission from "./ImageSubmission";
+
+import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
+import QuizIcon from "@mui/icons-material/Quiz";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 
 function Admin({ api_url }) {
     const [actionsCount, setActionsCount] = useState(0);
@@ -22,10 +29,12 @@ function Admin({ api_url }) {
     const search = useLocation().search;
     const adminCode = new URLSearchParams(search).get("adminCode");
 
+    const [backdrop, setBackdrop] = useState(false);
+
     useEffect(() => {
         async function fetchData() {
             const endpoint =
-                api_url + `/get-pending-submissions?adminCode=${adminCode}`;
+                api_url + `/get-image-submissions?adminCode=${adminCode}`;
 
             const response = await fetch(endpoint);
             const json = await response.json();
@@ -34,7 +43,23 @@ function Admin({ api_url }) {
         }
 
         fetchData();
+        console.log(actionsCount);
     }, [actionsCount]);
+
+    const [imageChallengeNames, setImageChallengeNames] = useState(null);
+
+    useEffect(() => {
+        async function fetchImageSubmissionNames() {
+            const response = await fetch(
+                api_url + "/get-image-submissions-names"
+            );
+
+            const json = await response.json();
+            setImageChallengeNames(json);
+        }
+
+        fetchImageSubmissionNames();
+    }, []);
 
     return (
         <Box
@@ -46,6 +71,15 @@ function Admin({ api_url }) {
                 minHeight: "100vh",
             }}
         >
+            <Backdrop
+                open={data == null || imageChallengeNames == null}
+                sx={{ zIndex: "1" }}
+            >
+                <CircularProgress></CircularProgress>
+            </Backdrop>
+            <Backdrop open={backdrop} sx={{ zIndex: "1" }}>
+                <CircularProgress></CircularProgress>
+            </Backdrop>
             <Box elevation={4}>
                 <List>
                     <ListItem
@@ -68,147 +102,192 @@ function Admin({ api_url }) {
                     </ListItem>
                     <ListItem>
                         <List>
-                            {data ? (
+                            {data && imageChallengeNames ? (
                                 <>
-                                    {data.map((item) => {
+                                    {imageChallengeNames.map((name) => {
                                         return (
-                                            <ListItem
-                                                key={item.id}
-                                                id={item.id}
-                                            >
-                                                <Card
-                                                    sx={{ minWidth: "300px" }}
-                                                >
-                                                    <Box
-                                                        sx={{ padding: "8px" }}
+                                            <>
+                                                <ListItem>
+                                                    <Paper
+                                                        sx={{ width: "100%" }}
                                                     >
-                                                        <Typography variant="body1">
-                                                            Submitted:{" "}
-                                                            {item.timestamp}
-                                                        </Typography>
-                                                    </Box>
-                                                    <Divider></Divider>
-                                                    <List>
-                                                        <ListItem>
-                                                            <List>
-                                                                <ListItem>
-                                                                    <Typography variant="body2">
-                                                                        Challenge:{" "}
-                                                                        {item.goldenTicketId ==
-                                                                        "9"
-                                                                            ? "Chessboard Paradox"
-                                                                            : "The Missing Puzzle"}
-                                                                    </Typography>
-                                                                </ListItem>
-                                                                <ListItem>
-                                                                    {" "}
-                                                                    <Typography variant="body2">
-                                                                        Submitter:{" "}
-                                                                        {
-                                                                            item.name
-                                                                        }
-                                                                    </Typography>
-                                                                </ListItem>
-                                                                <ListItem>
-                                                                    <Typography variant="body2">
-                                                                        Class:{" "}
-                                                                        {
-                                                                            item.rollClass
-                                                                        }
-                                                                    </Typography>
-                                                                </ListItem>
-                                                            </List>
-                                                        </ListItem>
-                                                        <ListItem
-                                                            sx={{
-                                                                justifyContent:
-                                                                    "center",
-                                                            }}
-                                                        >
-                                                            <img
-                                                                width="250px"
-                                                                src={item.image}
-                                                            />
-                                                        </ListItem>
-                                                    </List>
-
-                                                    <Divider></Divider>
-                                                    <Box
-                                                        sx={{
-                                                            padding: "8px",
-                                                            display: "flex",
-                                                            justifyContent:
-                                                                "space-between",
-                                                        }}
-                                                    >
-                                                        <Button
-                                                            startIcon={<Done />}
-                                                            onClick={async (
-                                                                event
-                                                            ) => {
-                                                                const id =
-                                                                    event.target
-                                                                        .parentElement
-                                                                        .parentElement
-                                                                        .parentElement
-                                                                        .id;
-
-                                                                const api_endpoint =
-                                                                    api_url +
-                                                                    `/verify-submission?adminCode=${adminCode}&id=${id}`;
-
-                                                                await fetch(
-                                                                    api_endpoint
-                                                                );
-
-                                                                setActionsCount(
-                                                                    actionsCount +
-                                                                        1
-                                                                );
-                                                            }}
-                                                        >
-                                                            Verify
-                                                        </Button>
-                                                        <Button
-                                                            startIcon={
-                                                                <Close />
-                                                            }
-                                                            onClick={async (
-                                                                event
-                                                            ) => {
-                                                                const id =
-                                                                    event.target
-                                                                        .parentElement
-                                                                        .parentElement
-                                                                        .parentElement
-                                                                        .id;
-
-                                                                const api_endpoint =
-                                                                    api_url +
-                                                                    `/reject-submission?adminCode=${adminCode}&id=${id}`;
-
-                                                                await fetch(
-                                                                    api_endpoint
-                                                                );
-                                                                setActionsCount(
-                                                                    actionsCount +
-                                                                        1
-                                                                );
-                                                            }}
-                                                        >
-                                                            Reject
-                                                        </Button>
-                                                    </Box>
-                                                </Card>
-                                            </ListItem>
+                                                        <List>
+                                                            <ListItem>
+                                                                <Typography
+                                                                    variant="h4"
+                                                                    sx={{
+                                                                        fontSize:
+                                                                            "20px",
+                                                                    }}
+                                                                >
+                                                                    {name}
+                                                                </Typography>
+                                                            </ListItem>
+                                                            <Divider
+                                                                textAl
+                                                            ></Divider>
+                                                            <ListItem>
+                                                                <EmojiEventsIcon
+                                                                    sx={{
+                                                                        marginRight:
+                                                                            "1rem",
+                                                                    }}
+                                                                />
+                                                                <Typography
+                                                                    variant="h5"
+                                                                    sx={{
+                                                                        fontSize:
+                                                                            "16px",
+                                                                    }}
+                                                                >
+                                                                    Winning
+                                                                    Solution:
+                                                                </Typography>
+                                                            </ListItem>
+                                                            <ListItem
+                                                                sx={{
+                                                                    justifyContent:
+                                                                        "center",
+                                                                }}
+                                                            >
+                                                                {data.filter(
+                                                                    (a) =>
+                                                                        a.challengeName ==
+                                                                            name &&
+                                                                        a.isAccepted ==
+                                                                            "VERIFIED"
+                                                                ).length >=
+                                                                1 ? (
+                                                                    data
+                                                                        .filter(
+                                                                            (
+                                                                                a
+                                                                            ) =>
+                                                                                a.challengeName ==
+                                                                                    name &&
+                                                                                a.isAccepted ==
+                                                                                    "VERIFIED"
+                                                                        )
+                                                                        .map(
+                                                                            (
+                                                                                submissionData
+                                                                            ) => {
+                                                                                return (
+                                                                                    <ImageSubmission
+                                                                                        setBackdrop={
+                                                                                            setBackdrop
+                                                                                        }
+                                                                                        api_url={
+                                                                                            api_url
+                                                                                        }
+                                                                                        actionsCount={
+                                                                                            actionsCount
+                                                                                        }
+                                                                                        setActionsCount={
+                                                                                            setActionsCount
+                                                                                        }
+                                                                                        submissionData={
+                                                                                            submissionData
+                                                                                        }
+                                                                                        adminCode={
+                                                                                            adminCode
+                                                                                        }
+                                                                                    />
+                                                                                );
+                                                                            }
+                                                                        )
+                                                                ) : (
+                                                                    <MoreHorizIcon />
+                                                                )}
+                                                            </ListItem>
+                                                            <ListItem>
+                                                                <QuizIcon
+                                                                    sx={{
+                                                                        marginRight:
+                                                                            "1rem",
+                                                                    }}
+                                                                />
+                                                                <Typography
+                                                                    variant="h5"
+                                                                    sx={{
+                                                                        fontSize:
+                                                                            "16px",
+                                                                    }}
+                                                                >
+                                                                    Unverified
+                                                                    Solutions:
+                                                                </Typography>
+                                                            </ListItem>
+                                                            <ListItem
+                                                                sx={{
+                                                                    justifyContent:
+                                                                        "center",
+                                                                }}
+                                                            >
+                                                                <List>
+                                                                    {data.filter(
+                                                                        (a) =>
+                                                                            a.challengeName ==
+                                                                                name &&
+                                                                            a.isAccepted ==
+                                                                                "UNVERIFIED"
+                                                                    ).length >=
+                                                                    1 ? (
+                                                                        data
+                                                                            .filter(
+                                                                                (
+                                                                                    a
+                                                                                ) =>
+                                                                                    a.challengeName ==
+                                                                                        name &&
+                                                                                    a.isAccepted ==
+                                                                                        "UNVERIFIED"
+                                                                            )
+                                                                            .map(
+                                                                                (
+                                                                                    submissionData
+                                                                                ) => {
+                                                                                    return (
+                                                                                        <ListItem>
+                                                                                            <ImageSubmission
+                                                                                                setBackdrop={
+                                                                                                    setBackdrop
+                                                                                                }
+                                                                                                api_url={
+                                                                                                    api_url
+                                                                                                }
+                                                                                                actionsCount={
+                                                                                                    actionsCount
+                                                                                                }
+                                                                                                setActionsCount={
+                                                                                                    setActionsCount
+                                                                                                }
+                                                                                                submissionData={
+                                                                                                    submissionData
+                                                                                                }
+                                                                                                adminCode={
+                                                                                                    adminCode
+                                                                                                }
+                                                                                            />
+                                                                                        </ListItem>
+                                                                                    );
+                                                                                }
+                                                                            )
+                                                                    ) : (
+                                                                        <MoreHorizIcon />
+                                                                    )}
+                                                                </List>
+                                                            </ListItem>
+                                                        </List>
+                                                    </Paper>
+                                                </ListItem>
+                                                <Divider></Divider>
+                                            </>
                                         );
                                     })}
                                 </>
                             ) : (
-                                <ListItem sx={{ justifyContent: "center" }}>
-                                    {" "}
-                                    <CircularProgress />
-                                </ListItem>
+                                <></>
                             )}
                         </List>
                     </ListItem>

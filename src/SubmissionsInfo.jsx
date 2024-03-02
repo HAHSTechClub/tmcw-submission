@@ -23,7 +23,7 @@ function SubmissionsInfo({ api_url, submissionsCount }) {
     useEffect(() => {
         async function fetchData() {
             const response = await fetch(
-                api_url + "/get-submitted-code-information"
+                api_url + "/get-submitted-submissions-data"
             );
 
             const json = await response.json();
